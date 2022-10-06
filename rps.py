@@ -45,12 +45,27 @@ class Game:
         self.p2 = p2
 
     def outcome(self, m1, m2):
-        if beats(m1, m2):
-            print("Computer wins")
-        elif beats(m2, m1):
-            print("You win")
+        comp_score = 0
+        your_score = 0
+        while (m1 == 'rock' or m1 == 'paper' or m1 == 'scissors') and \
+                (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
+            if beats(m1, m2):
+                comp_score += 1
+                print("Computer wins")
+                print(f"Computer score: {comp_score}\nYour score: {your_score}")
+                break
+            elif beats(m2, m1):
+                your_score += 1
+                print("You win")
+                print(f"Computer score: {comp_score}\nYour score: {your_score}")
+                break
+            else:
+                print("It's a draw")
+                break
         else:
-            print("It's a draw")
+            print("Please enter a valid move")
+
+        return comp_score, your_score
 
     def play_round(self):
         move1 = self.p1.move()
@@ -61,13 +76,22 @@ class Game:
         self.p2.learn(move2, move1)
 
     def play_game(self):
+
         print("Game start!")
         for round in range(3):
             print(f"Round {round}:")
             self.play_round()
+
+    def final_result(self):
+        print(f"Final Score:\nComputer: {comp_score}\nYou: {your_score}")
+        if comp_score > your_score:
+            print("The computer wins")
+        else:
+            print("You win!")
         print("Game over!")
 
 
 if __name__ == '__main__':
     game = Game(RandomPlayer(), HumanPlayer())
     game.play_game()
+    game.final_result()
