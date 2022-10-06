@@ -3,6 +3,7 @@
 """This program plays a game of Rock, Paper, Scissors between two Players,
 and reports both Player's scores each round."""
 import random
+
 moves = ['rock', 'paper', 'scissors']
 
 """The Player class is the parent class for all of the Players
@@ -31,8 +32,8 @@ class HumanPlayer(Player):
                              " 'paper',"
                              " or 'scissors':\n")
         while True:
-            if human_choice == 'rock'\
-                    or human_choice == 'paper'\
+            if human_choice == 'rock' \
+                    or human_choice == 'paper' \
                     or human_choice == 'scissors':
                 return human_choice
             else:
@@ -41,28 +42,33 @@ class HumanPlayer(Player):
 
 
 class ReflectPlayer(Player):
+    def __init__(self):
+        self.their_last_move = None
+        self.my_move = None
+
     def move(self):
         super().move()
-        return
+        return self.their_last_move
 
     def learn(self, my_move, their_move):
         super().learn(my_move, their_move)
-        return their_move
 
 
 class CyclePlayer(Player):
+    my_current_move = None
+    my_last_move = None
     def move(self):
         super().move()
+        return self.my_current_move
 
     def learn(self, my_move, their_move):
         super().learn(my_move, their_move)
-        if my_move == 'rock':
-            their_move = 'paper'
-        elif my_move == 'paper':
-            their_move = 'scissors'
-        elif my_move == 'scissors':
-            their_move = 'rock'
-        return their_move
+        if self.my_last_move == 'rock':
+            self.my_current_move = 'paper'
+        elif self.my_last_move == 'paper':
+            self.my_current_move = 'scissors'
+        elif self.my_last_move == 'scissors':
+            self.my_current_move = 'rock'
 
 
 def beats(one, two):
@@ -83,7 +89,7 @@ class Game:
 
     def outcome(self, m1, m2):
         while (m1 == 'rock' or m1 == 'paper' or m1 == 'scissors') and \
-                    (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
+                (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
             if beats(m1, m2):
                 self.comp_score += 1
                 print("Computer wins")
@@ -113,8 +119,9 @@ class Game:
     def play_game(self):
 
         print("Game start!")
-        for round in range(3):
-            print(f"Round {round+1}:")
+        rounds = 3
+        for round in range(rounds):
+            print(f"Round {round + 1}:")
             self.play_round()
 
     def final_result(self):
@@ -126,7 +133,7 @@ class Game:
         elif self.comp_score < self.your_score:
             print("You win!")
         else:
-            print("That's not possible! You must be a hacker!")
+            print("It's a draw")
         print("Game over!")
 
     def repeat(self):
@@ -145,7 +152,7 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(ReflectPlayer(), HumanPlayer())
+    game = Game(CyclePlayer(), HumanPlayer())
     game.play_game()
     game.final_result()
     game.repeat()
