@@ -26,7 +26,10 @@ class RandomPlayer(Player):
 class HumanPlayer(Player):
     def move(self):
         super().move()
-        human_choice = input("Enter your move by typing either 'rock', 'paper', or 'scissors':\n")
+        human_choice = input("Enter your move by typing either"
+                             " 'rock',"
+                             " 'paper',"
+                             " or 'scissors':\n")
         return human_choice
 
 
@@ -41,10 +44,19 @@ class Game:
         self.p1 = p1
         self.p2 = p2
 
+    def outcome(self, m1, m2):
+        if beats(m1, m2):
+            print("Computer wins")
+        elif beats(m2, m1):
+            print("You win")
+        else:
+            print("It's a draw")
+
     def play_round(self):
         move1 = self.p1.move()
         move2 = self.p2.move()
-        print(f"Player 1: {move1}  Player 2: {move2}")
+        print(f"Computer: {move1}  You: {move2}")
+        self.outcome(move1, move2)
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
