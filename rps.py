@@ -5,7 +5,7 @@ and reports both Player's scores each round."""
 import random
 
 moves = ['rock', 'paper', 'scissors']
-
+rounds = 3
 """The Player class is the parent class for all of the Players
 in this game"""
 
@@ -42,9 +42,10 @@ class HumanPlayer(Player):
 
 
 class ReflectPlayer(Player):
+    their_last_move = random.choice(moves)
+
     def __init__(self):
-        self.their_last_move = None
-        self.my_move = None
+        self.my_current_move = self.their_last_move
 
     def move(self):
         super().move()
@@ -52,24 +53,25 @@ class ReflectPlayer(Player):
 
     def learn(self, my_move, their_move):
         super().learn(my_move, their_move)
+        self.my_current_move = my_move
+        self.their_last_move = their_move
 
 
 class CyclePlayer(Player):
-    my_current_move = None
-    my_last_move = None
+    my_last_move = random.choice(moves)
+
     def move(self):
         super().move()
         return self.my_current_move
 
     def learn(self, my_move, their_move):
         super().learn(my_move, their_move)
-        if self.my_last_move == 'rock':
+        if their_move == 'rock':
             self.my_current_move = 'paper'
-        elif self.my_last_move == 'paper':
+        elif their_move == 'paper':
             self.my_current_move = 'scissors'
-        elif self.my_last_move == 'scissors':
+        elif their_move == 'scissors':
             self.my_current_move = 'rock'
-
 
 def beats(one, two):
     return ((one == 'rock' and two == 'scissors') or
@@ -119,7 +121,6 @@ class Game:
     def play_game(self):
 
         print("Game start!")
-        rounds = 3
         for round in range(rounds):
             print(f"Round {round + 1}:")
             self.play_round()
