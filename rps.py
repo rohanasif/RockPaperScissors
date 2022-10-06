@@ -31,11 +31,38 @@ class HumanPlayer(Player):
                              " 'paper',"
                              " or 'scissors':\n")
         while True:
-            if human_choice == 'rock' or human_choice == 'paper' or human_choice == 'scissors':
+            if human_choice == 'rock'\
+                    or human_choice == 'paper'\
+                    or human_choice == 'scissors':
                 return human_choice
             else:
                 human_choice = input("Please enter a valid move:\n")
                 continue
+
+
+class ReflectPlayer(Player):
+    def move(self):
+        super().move()
+        return
+
+    def learn(self, my_move, their_move):
+        super().learn(my_move, their_move)
+        return their_move
+
+
+class CyclePlayer(Player):
+    def move(self):
+        super().move()
+
+    def learn(self, my_move, their_move):
+        super().learn(my_move, their_move)
+        if my_move == 'rock':
+            their_move = 'paper'
+        elif my_move == 'paper':
+            their_move = 'scissors'
+        elif my_move == 'scissors':
+            their_move = 'rock'
+        return their_move
 
 
 def beats(one, two):
@@ -60,12 +87,14 @@ class Game:
             if beats(m1, m2):
                 self.comp_score += 1
                 print("Computer wins")
-                print(f"Computer score: {self.comp_score}\nYour score: {self.your_score}")
+                print(f"Computer score: {self.comp_score}\n"
+                      f"Your score: {self.your_score}")
                 break
             elif beats(m2, m1):
                 self.your_score += 1
                 print("You win")
-                print(f"Computer score: {self.comp_score}\nYour score: {self.your_score}")
+                print(f"Computer score: {self.comp_score}\n"
+                      f"Your score: {self.your_score}")
                 break
             else:
                 print("It's a draw")
@@ -89,7 +118,9 @@ class Game:
             self.play_round()
 
     def final_result(self):
-        print(f"Final Score:\nComputer: {self.comp_score}\nYou: {self.your_score}")
+        print(f"Final Score:\n"
+              f"Computer: {self.comp_score}\n"
+              f"You: {self.your_score}")
         if self.comp_score > self.your_score:
             print("The computer wins")
         elif self.comp_score < self.your_score:
@@ -114,7 +145,7 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(RandomPlayer(), HumanPlayer())
+    game = Game(ReflectPlayer(), HumanPlayer())
     game.play_game()
     game.final_result()
     game.repeat()
