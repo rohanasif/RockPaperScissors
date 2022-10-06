@@ -59,6 +59,7 @@ class ReflectPlayer(Player):
 
 class CyclePlayer(Player):
     my_last_move = random.choice(moves)
+    my_current_move = None
 
     def move(self):
         super().move()
