@@ -2,7 +2,7 @@
 
 """This program plays a game of Rock, Paper, Scissors between two Players,
 and reports both Player's scores each round."""
-
+import random
 moves = ['rock', 'paper', 'scissors']
 
 """The Player class is the parent class for all of the Players
@@ -15,6 +15,19 @@ class Player:
 
     def learn(self, my_move, their_move):
         pass
+
+
+class RandomPlayer(Player):
+    def move(self):
+        super().move()
+        return random.choice(moves)
+
+
+class HumanPlayer(Player):
+    def move(self):
+        super().move()
+        human_choice = input("Enter your move by typing either 'rock', 'paper', or 'scissors':\n")
+        return human_choice
 
 
 def beats(one, two):
@@ -44,5 +57,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Player(), Player())
+    game = Game(RandomPlayer(), HumanPlayer())
     game.play_game()
