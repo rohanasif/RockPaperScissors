@@ -40,32 +40,30 @@ def beats(one, two):
 
 
 class Game:
+    comp_score = 0
+    your_score = 0
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
 
     def outcome(self, m1, m2):
-        comp_score = 0
-        your_score = 0
         while (m1 == 'rock' or m1 == 'paper' or m1 == 'scissors') and \
                 (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
             if beats(m1, m2):
-                comp_score += 1
+                self.comp_score += 1
                 print("Computer wins")
-                print(f"Computer score: {comp_score}\nYour score: {your_score}")
+                print(f"Computer score: {self.comp_score}\nYour score: {self.your_score}")
                 break
             elif beats(m2, m1):
-                your_score += 1
+                self.your_score += 1
                 print("You win")
-                print(f"Computer score: {comp_score}\nYour score: {your_score}")
+                print(f"Computer score: {self.comp_score}\nYour score: {self.your_score}")
                 break
             else:
                 print("It's a draw")
                 break
         else:
             print("Please enter a valid move")
-
-        return comp_score, your_score
 
     def play_round(self):
         move1 = self.p1.move()
@@ -83,8 +81,8 @@ class Game:
             self.play_round()
 
     def final_result(self):
-        print(f"Final Score:\nComputer: {comp_score}\nYou: {your_score}")
-        if comp_score > your_score:
+        print(f"Final Score:\nComputer: {self.comp_score}\nYou: {self.your_score}")
+        if self.comp_score > self.your_score:
             print("The computer wins")
         else:
             print("You win!")
