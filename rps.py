@@ -30,7 +30,12 @@ class HumanPlayer(Player):
                              " 'rock',"
                              " 'paper',"
                              " or 'scissors':\n")
-        return human_choice
+        while True:
+            if human_choice == 'rock' or human_choice == 'paper' or human_choice == 'scissors':
+                return human_choice
+            else:
+                human_choice = input("Please enter a valid move:\n")
+                continue
 
 
 def beats(one, two):
@@ -42,13 +47,16 @@ def beats(one, two):
 class Game:
     comp_score = 0
     your_score = 0
+    m1 = ''
+    m2 = ''
+
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
 
     def outcome(self, m1, m2):
         while (m1 == 'rock' or m1 == 'paper' or m1 == 'scissors') and \
-                (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
+                    (m2 == 'rock' or m2 == 'paper' or m2 == 'scissors'):
             if beats(m1, m2):
                 self.comp_score += 1
                 print("Computer wins")
@@ -77,19 +85,36 @@ class Game:
 
         print("Game start!")
         for round in range(3):
-            print(f"Round {round}:")
+            print(f"Round {round+1}:")
             self.play_round()
 
     def final_result(self):
         print(f"Final Score:\nComputer: {self.comp_score}\nYou: {self.your_score}")
         if self.comp_score > self.your_score:
             print("The computer wins")
-        else:
+        elif self.comp_score < self.your_score:
             print("You win!")
+        else:
+            print("That's not possible! You must be a hacker!")
         print("Game over!")
+
+    def repeat(self):
+        while True:
+            print("Do you want to play again?")
+            inp = input("Enter 'y' for yes and 'n' for no\n")
+            if inp.lower() == 'n':
+                print("Thanks for playing")
+                break
+            elif inp.lower() == 'y':
+                game.play_game()
+                game.final_result()
+            else:
+                print("Please enter valid input")
+                continue
 
 
 if __name__ == '__main__':
     game = Game(RandomPlayer(), HumanPlayer())
     game.play_game()
     game.final_result()
+    game.repeat()
